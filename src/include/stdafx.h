@@ -3,10 +3,18 @@
 
 #include <QtCore/qglobal.h>
 
-#ifdef ELAWIDGETTOOLS_LIBRARY
+// #ifdef ELAWIDGETTOOLS_LIBRARY
+// #define ELA_EXPORT Q_DECL_EXPORT
+// #else
+// #define ELA_EXPORT Q_DECL_IMPORT
+// #endif
+
+#if defined(ELAWIDGETTOOLS_LIBRARY) && defined(QT_DLL) // 动态库
 #define ELA_EXPORT Q_DECL_EXPORT
-#else
+#elif defined(QT_DLL) // 使用动态库
 #define ELA_EXPORT Q_DECL_IMPORT
+#else // 静态库
+#define ELA_EXPORT
 #endif
 
 #define Q_PROPERTY_CREATE(TYPE, M)                          \
