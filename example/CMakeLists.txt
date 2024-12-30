@@ -3,7 +3,7 @@ project(ElaWidgetToolsExample LANGUAGES CXX)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
-find_package(ElaWidgetTools REQUIRED PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../install/lib")
+find_package(ElaWidgetTools REQUIRED PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../../../install/lib")
 
 
 qt_standard_project_setup()
@@ -33,13 +33,13 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/ExamplePage
     ${CMAKE_CURRENT_SOURCE_DIR}/ModelView
-    ${CMAKE_CURRENT_SOURCE_DIR}/../install/include
+    # ${CMAKE_CURRENT_SOURCE_DIR}/../../../install/include
 )
 
-target_link_directories(${PROJECT_NAME}
-    PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/../install/lib
-)
+# target_link_directories(${PROJECT_NAME}
+#     PUBLIC
+#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../install/lib
+# )
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

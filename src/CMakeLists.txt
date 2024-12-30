@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required(VERSION 3.5)
 
-project(ELAWIDGETTOOLS VERSION 2.0.0 LANGUAGES CXX)
+project(ElaWidgetTools VERSION 2.0.0 LANGUAGES CXX)
 
 set(EXPORT_NAME "ElaWidgetTools")
 set(CMAKE_AUTOUIC ON)
@@ -102,38 +102,22 @@ else ()
 endif ()
 
 
-install(
-    TARGETS ${EXPORT_NAME}
-    EXPORT ${EXPORT_NAME}
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin
-)
-
+# file(GLOB_RECURSE INCLUDE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 install(FILES ${EXPORT_HEADERS} DESTINATION include)
-install(TARGETS ${EXPORT_NAME}
-    RUNTIME DESTINATION ${CMAKE_BINARY_DIR}
+
+install(TARGETS ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}Targets
+  LIBRARY DESTINATION "lib"
+  ARCHIVE DESTINATION "lib"
 )
 
-set(INCLUDE_DIRS include)
-set(LIBRARIES ${EXPORT_NAME})
-set(LIB_DIR lib)
+install(EXPORT ${PROJECT_NAME}Targets
+  FILE ${PROJECT_NAME}Targets.cmake
+  NAMESPACE ${PROJECT_NAME}::
+  DESTINATION "cmake")
 
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-    ${PROJECT_BINARY_DIR}/${EXPORT_NAME}ConfigVersion.cmake
-    VERSION 2.0.0
-    COMPATIBILITY SameMajorVersion
-)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    @ONLY)
 
-configure_package_config_file(
-    ${PROJECT_SOURCE_DIR}/${EXPORT_NAME}Config.cmake.in
-    ${PROJECT_BINARY_DIR}/${EXPORT_NAME}Config.cmake
-    INSTALL_DESTINATION lib/cmake
-    PATH_VARS INCLUDE_DIRS LIBRARIES LIB_DIR
-    INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}
-)
-
-install(
-    FILES ${PROJECT_BINARY_DIR}/${EXPORT_NAME}Config.cmake ${PROJECT_BINARY_DIR}/${EXPORT_NAME}ConfigVersion.cmake DESTINATION lib/cmake
-)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake" DESTINATION "cmake")
