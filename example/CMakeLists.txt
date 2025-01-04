@@ -3,7 +3,7 @@ project(ElaWidgetToolsExample LANGUAGES CXX)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
-find_package(ElaWidgetTools REQUIRED)
+# find_package(ElaWidgetTools REQUIRED)
 
 
 qt_standard_project_setup()
