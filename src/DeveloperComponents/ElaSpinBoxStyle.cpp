@@ -57,13 +57,17 @@ void ElaSpinBoxStyle::drawComplexControl(ComplexControl control, const QStyleOpt
         {
             painter->setBrush(ElaThemeColor(_themeMode, BasicBaseDeep));
         }
+        const int arcRadius = 4;
         QPainterPath addLinePath;
-        addLinePath.moveTo(addLineRect.topLeft());
-        addLinePath.lineTo(addLineRect.bottomLeft());
-        addLinePath.lineTo(addLineRect.right() - 4, addLineRect.bottom());
-        addLinePath.arcTo(QRectF(addLineRect.right() - 8, addLineRect.bottom() - 8, 8, 8), -90, 90);
-        addLinePath.lineTo(addLineRect.right(), addLineRect.y() + 4);
-        addLinePath.arcTo(QRectF(addLineRect.right() - 8, addLineRect.y(), 8, 8), 0, 90);
+        addLinePath.moveTo(addLineRect.x() + arcRadius, addLineRect.y());
+        addLinePath.lineTo(addLineRect.right() - arcRadius, addLineRect.y());
+        addLinePath.arcTo(QRectF(addLineRect.right() - arcRadius * 2, addLineRect.y(), arcRadius * 2, arcRadius * 2), 90, -90);
+        addLinePath.lineTo(addLineRect.right(), addLineRect.bottom() - arcRadius);
+        addLinePath.arcTo(QRectF(addLineRect.right() - arcRadius * 2, addLineRect.bottom() - arcRadius * 2, arcRadius * 2, arcRadius * 2), 0, -90);
+        addLinePath.lineTo(addLineRect.x() + arcRadius, addLineRect.bottom());
+        addLinePath.arcTo(QRectF(addLineRect.x(), addLineRect.bottom() - arcRadius * 2, arcRadius * 2, arcRadius * 2), 270, -90);
+        addLinePath.lineTo(addLineRect.x(), addLineRect.y() + arcRadius);
+        addLinePath.arcTo(QRectF(addLineRect.x(), addLineRect.y(), arcRadius * 2, arcRadius * 2), 180, -90);
         addLinePath.closeSubpath();
         painter->drawPath(addLinePath);
 
@@ -92,29 +96,32 @@ void ElaSpinBoxStyle::drawComplexControl(ComplexControl control, const QStyleOpt
             painter->setBrush(ElaThemeColor(_themeMode, BasicBaseDeep));
         }
         QPainterPath subLinePath;
-        subLinePath.moveTo(subLineRect.topRight());
-        subLinePath.lineTo(subLineRect.x() + 4, subLineRect.y());
-        subLinePath.arcTo(QRectF(subLineRect.x(), subLineRect.y(), 8, 8), 90, 90);
-        subLinePath.lineTo(subLineRect.x(), subLineRect.bottom() - 4);
-        subLinePath.arcTo(QRectF(subLineRect.x(), subLineRect.bottom() - 8, 8, 8), 180, 90);
-        subLinePath.lineTo(subLineRect.bottomRight());
+        subLinePath.moveTo(subLineRect.x() + arcRadius, subLineRect.y());
+        subLinePath.lineTo(subLineRect.right() - arcRadius, subLineRect.y());
+        subLinePath.arcTo(QRectF(subLineRect.right() - arcRadius * 2, subLineRect.y(), arcRadius * 2, arcRadius * 2), 90, -90);
+        subLinePath.lineTo(subLineRect.right(), subLineRect.bottom() - arcRadius);
+        subLinePath.arcTo(QRectF(subLineRect.right() - arcRadius * 2, subLineRect.bottom() - arcRadius * 2, arcRadius * 2, arcRadius * 2), 0, -90);
+        subLinePath.lineTo(subLineRect.x() + arcRadius, subLineRect.bottom());
+        subLinePath.arcTo(QRectF(subLineRect.x(), subLineRect.bottom() - arcRadius * 2, arcRadius * 2, arcRadius * 2), 270, -90);
+        subLinePath.lineTo(subLineRect.x(), subLineRect.y() + arcRadius);
+        subLinePath.arcTo(QRectF(subLineRect.x(), subLineRect.y(), arcRadius * 2, arcRadius * 2), 180, -90);
         subLinePath.closeSubpath();
         painter->drawPath(subLinePath);
         //底边线
         if (sopt->state & QStyle::State_HasFocus)
         {
             painter->setPen(QPen(ElaThemeColor(_themeMode, PrimaryNormal), 2));
-            painter->drawLine(subLineRect.right() + 1, subLineRect.y() + subLineRect.height() - 2, addLineRect.left() - 1, subLineRect.y() + subLineRect.height() - 2);
+            painter->drawLine(subLineRect.right() + 1, 2 * subLineRect.y() + subLineRect.height() - 2, addLineRect.left() - 1, 2* subLineRect.y() + subLineRect.height() - 2);
         }
         else
         {
             painter->setPen(ElaThemeColor(_themeMode, BasicHemline));
-            painter->drawLine(subLineRect.right() + 1, subLineRect.y() + subLineRect.height() - 1, addLineRect.left() - 1, subLineRect.y() + subLineRect.height() - 1);
+            painter->drawLine(subLineRect.right() + 1, 2*subLineRect.y() + subLineRect.height() - 1, addLineRect.left() - 1, 2*subLineRect.y() + subLineRect.height() - 1);
         }
 
         //添加图标
         QFont iconFont = QFont("ElaAwesome");
-        iconFont.setPixelSize(17);
+        iconFont.setPixelSize(15);
         painter->setFont(iconFont);
         painter->setPen(ElaThemeColor(_themeMode, BasicText));
         painter->drawText(addLineRect, Qt::AlignCenter, QChar((unsigned short)ElaIconType::Plus));
@@ -144,13 +151,13 @@ QRect ElaSpinBoxStyle::subControlRect(ComplexControl cc, const QStyleOptionCompl
         {
             //增加按钮
             QRect spinBoxRect = QProxyStyle::subControlRect(cc, opt, SC_SpinBoxFrame, widget);
-            return QRect(spinBoxRect.width() - spinBoxRect.height(), 0, spinBoxRect.height(), spinBoxRect.height());
+            return QRect(spinBoxRect.width() - spinBoxRect.height() + 5, 5, spinBoxRect.height() - 10, spinBoxRect.height() - 10);
         }
         case SC_ScrollBarSubLine:
         {
             //减少按钮
             QRect spinBoxRect = QProxyStyle::subControlRect(cc, opt, SC_SpinBoxFrame, widget);
-            return QRect(0, 0, spinBoxRect.height(), spinBoxRect.height());
+            return QRect(5, 5, spinBoxRect.height() - 10, spinBoxRect.height() - 10);
         }
         case SC_SpinBoxEditField:
         {

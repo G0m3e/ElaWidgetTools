@@ -13,14 +13,11 @@ ElaTimeEdit::ElaTimeEdit(QWidget* parent)
 {
     Q_D(ElaTimeEdit);
     d->q_ptr = this;
+    setFixedSize(120, 30);
     setObjectName("ElaTimeEdit");
     setStyle(new ElaTimeEditStyle(style()));
     lineEdit()->setAlignment(Qt::AlignCenter);
     lineEdit()->setStyleSheet("background-color:transparent");
-    QPalette palette;
-    palette.setColor(QPalette::Base, Qt::transparent);
-    palette.setColor(QPalette::Text, ElaThemeColor(eTheme->getThemeMode(), BasicText));
-    lineEdit()->setPalette(palette);
     connect(eTheme, &ElaTheme::themeModeChanged, this, [=](ElaThemeType::ThemeMode themeMode) {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::transparent);
