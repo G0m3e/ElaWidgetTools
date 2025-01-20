@@ -3,6 +3,7 @@
 #include <QContextMenuEvent>
 #include <QLineEdit>
 #include <QPainter>
+#include <QTimer>
 
 #include "DeveloperComponents/ElaTimeEditStyle.h"
 #include "ElaMenu.h"
@@ -18,6 +19,12 @@ ElaTimeEdit::ElaTimeEdit(QWidget* parent)
     setStyle(new ElaTimeEditStyle(style()));
     lineEdit()->setAlignment(Qt::AlignCenter);
     lineEdit()->setStyleSheet("background-color:transparent");
+    QTimer::singleShot(0, this, [this](){
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::transparent);
+        palette.setColor(QPalette::Text, ElaThemeColor(eTheme->getThemeMode(), BasicText));
+        lineEdit()->setPalette(palette);
+    });
     connect(eTheme, &ElaTheme::themeModeChanged, this, [=](ElaThemeType::ThemeMode themeMode) {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::transparent);
@@ -34,7 +41,7 @@ void ElaTimeEdit::stepBy(int steps)
 {
     if(currentSection() == QDateTimeEdit::MSecSection)
     {
-        steps = steps * 100;
+        steps = steps * 10;
     }
     QTimeEdit::stepBy(steps);
 }
