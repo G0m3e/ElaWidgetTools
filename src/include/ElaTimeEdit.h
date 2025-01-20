@@ -13,9 +13,11 @@ class ELA_EXPORT ElaTimeEdit : public QTimeEdit
 public:
     explicit ElaTimeEdit(QWidget* parent = nullptr);
     ~ElaTimeEdit();
+    void stepBy(int steps);
 
 protected:
     void contextMenuEvent(QContextMenuEvent* event) override;
+    void focusInEvent(QFocusEvent *event) override;
 };
 
 #endif // ELATIMEEDIT_H

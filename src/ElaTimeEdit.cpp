@@ -30,6 +30,15 @@ ElaTimeEdit::~ElaTimeEdit()
 {
 }
 
+void ElaTimeEdit::stepBy(int steps)
+{
+    if(currentSection() == QDateTimeEdit::MSecSection)
+    {
+        steps = steps * 100;
+    }
+    QTimeEdit::stepBy(steps);
+}
+
 void ElaTimeEdit::contextMenuEvent(QContextMenuEvent *event)
 {
     Q_D(ElaTimeEdit);
@@ -64,4 +73,11 @@ void ElaTimeEdit::contextMenuEvent(QContextMenuEvent *event)
         }
     }
     event->accept();
+}
+
+void ElaTimeEdit::focusInEvent(QFocusEvent *event)
+{
+    QTimeEdit::focusInEvent(event);
+    setCurrentSection(QDateTimeEdit::MSecSection);
+    setSelectedSection(QDateTimeEdit::MSecSection);
 }
