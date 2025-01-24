@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QPropertyAnimation>
+#include <QTimer>
 
 #include "ElaEventBus.h"
 #include "ElaLineEditStyle.h"
@@ -26,15 +27,17 @@ ElaLineEdit::ElaLineEdit(QWidget* parent)
     d->_pIsClearButtonEnable = true;
     setFocusPolicy(Qt::StrongFocus);
     // 事件总线
-    d->_focusEvent = new ElaEvent("WMWindowClicked", "onWMWindowClickedEvent", d);
-    d->_focusEvent->registerAndInit();
+    // d->_focusEvent = new ElaEvent("WMWindowClicked", "onWMWindowClickedEvent", d);
+    // d->_focusEvent->registerAndInit();
     setMouseTracking(true);
     QFont textFont = font();
     textFont.setLetterSpacing(QFont::AbsoluteSpacing, d->_textSpacing);
     setFont(textFont);
     setStyle(new ElaLineEditStyle(style()));
     setStyleSheet("#ElaLineEdit{padding-left: 10px;}");
-    d->onThemeChanged(eTheme->getThemeMode());
+    QTimer::singleShot(0, this, [=](){
+        d->onThemeChanged(eTheme->getThemeMode());
+    });
     connect(eTheme, &ElaTheme::themeModeChanged, d, &ElaLineEditPrivate::onThemeChanged);
     setVisible(true);
 }
@@ -61,7 +64,7 @@ void ElaLineEdit::focusInEvent(QFocusEvent* event)
 {
     Q_D(ElaLineEdit);
     Q_EMIT focusIn(this->text());
-    if (event->reason() == Qt::MouseFocusReason)
+    if (event->reason() == Qt::MouseFocusReason || event->reason() == Qt::OtherFocusReason)
     {
         if (d->_pIsClearButtonEnable)
         {

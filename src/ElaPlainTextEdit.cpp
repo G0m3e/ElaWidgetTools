@@ -5,6 +5,7 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QTimer>
 
 #include "ElaEventBus.h"
 #include "ElaMenu.h"
@@ -23,12 +24,14 @@ ElaPlainTextEdit::ElaPlainTextEdit(QWidget* parent)
     setVerticalScrollBar(new ElaScrollBar(this));
     setMouseTracking(true);
     // 事件总线
-    d->_focusEvent = new ElaEvent("WMWindowClicked", "onWMWindowClickedEvent", d);
-    d->_focusEvent->registerAndInit();
+    // d->_focusEvent = new ElaEvent("WMWindowClicked", "onWMWindowClickedEvent", d);
+    // d->_focusEvent->registerAndInit();
 
     d->_style = new ElaPlainTextEditStyle(style());
     setStyle(d->_style);
-    d->onThemeChanged(eTheme->getThemeMode());
+    QTimer::singleShot(0, this, [=](){
+        d->onThemeChanged(eTheme->getThemeMode());
+    });
     connect(eTheme, &ElaTheme::themeModeChanged, d, &ElaPlainTextEditPrivate::onThemeChanged);
 }
 
@@ -45,7 +48,7 @@ ElaPlainTextEdit::~ElaPlainTextEdit()
 void ElaPlainTextEdit::focusInEvent(QFocusEvent* event)
 {
     Q_D(ElaPlainTextEdit);
-    if (event->reason() == Qt::MouseFocusReason)
+    if (event->reason() == Qt::MouseFocusReason || event->reason() == Qt::OtherFocusReason)
     {
         QPropertyAnimation* markAnimation = new QPropertyAnimation(d->_style, "pExpandMarkWidth");
         connect(markAnimation, &QPropertyAnimation::valueChanged, this, [=](const QVariant& value) {

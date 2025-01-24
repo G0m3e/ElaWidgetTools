@@ -3,6 +3,7 @@
 #include <QContextMenuEvent>
 #include <QLineEdit>
 #include <QPainter>
+#include <QTimer>
 
 #include "DeveloperComponents/ElaSpinBoxStyle.h"
 #include "ElaMenu.h"
@@ -17,6 +18,12 @@ ElaSpinBox::ElaSpinBox(QWidget* parent)
     setStyle(new ElaSpinBoxStyle(style()));
     lineEdit()->setAlignment(Qt::AlignCenter);
     lineEdit()->setStyleSheet("background-color:transparent");
+    QTimer::singleShot(0, this, [this](){
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::transparent);
+        palette.setColor(QPalette::Text, ElaThemeColor(eTheme->getThemeMode(), BasicText));
+        lineEdit()->setPalette(palette);
+    });
     connect(eTheme, &ElaTheme::themeModeChanged, this, [=](ElaThemeType::ThemeMode themeMode) {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::transparent);

@@ -28,7 +28,7 @@ ElaNavigationBar::ElaNavigationBar(QWidget* parent)
 {
     Q_D(ElaNavigationBar);
     d->q_ptr = this;
-    setFixedWidth(300);
+    setFixedWidth(220);
     d->_pIsTransparent = true;
 
     //用户卡片
