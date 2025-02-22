@@ -10,7 +10,7 @@ class ElaComboBoxStyle;
 class ElaComboBoxPrivate : public QObject
 {
     Q_OBJECT
-    Q_D_CREATE(ElaComboBox);
+    Q_D_CREATE(ElaComboBox)
     Q_PROPERTY_CREATE_D(int, BorderRadius)
 
 public:

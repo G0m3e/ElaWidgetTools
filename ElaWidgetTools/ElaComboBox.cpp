@@ -5,6 +5,8 @@
 #include <QLayout>
 #include <QListView>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QStylePainter>
 #include <QPropertyAnimation>
 
 #include "ElaComboBoxStyle.h"
@@ -61,6 +63,35 @@ ElaComboBox::ElaComboBox(QWidget* parent)
 
 ElaComboBox::~ElaComboBox()
 {
+}
+
+void ElaComboBox::paintEvent(QPaintEvent *e)
+{
+    // QPainter painter(this);
+    // QStyleOptionComboBox opt;
+    // opt.initFrom(this);
+    // opt.editable = isEditable();
+    // opt.currentText = currentText();
+    // opt.frame = true;
+
+    // // 调用当前的 QStyle 绘制
+    // style()->drawComplexControl(QStyle::CC_ComboBox, &opt, &painter, this);
+    QStylePainter painter(this);
+    painter.setPen(palette().color(QPalette::Text));
+
+    // draw the combobox frame, focusrect and selected etc.
+    QStyleOptionComboBox opt;
+    initStyleOption(&opt);
+    if (currentIndex() < 0 && !placeholderText().isEmpty()) {
+        opt.palette.setBrush(QPalette::ButtonText, opt.palette.placeholderText());
+        opt.currentText = placeholderText();
+    }
+    painter.drawComplexControl(QStyle::CC_ComboBox, opt);
+
+
+
+    // draw the icon and text
+    // painter.drawControl(QStyle::CE_ComboBoxLabel, opt);
 }
 
 void ElaComboBox::showPopup()
