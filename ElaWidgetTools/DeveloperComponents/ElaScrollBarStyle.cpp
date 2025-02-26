@@ -52,7 +52,7 @@ void ElaScrollBarStyle::drawComplexControl(ComplexControl control, const QStyleO
                     // 左三角
                     qreal centerLeftX = leftIndicatorRect.x() + leftIndicatorRect.width() / 2;
                     qreal centerRightX = rightIndicatorRect.x() + rightIndicatorRect.width() / 2;
-                    qreal centerY = leftIndicatorRect.height() / 2;
+                    qreal centerY = leftIndicatorRect.height() / 2 + leftIndicatorRect.y();
                     QPainterPath leftPath;
                     leftPath.moveTo(centerLeftX - qCos(30 * M_PI / 180.0) * sideLength / 2, centerY);
                     leftPath.lineTo(centerLeftX + qCos(30 * M_PI / 180.0) * sideLength / 2, centerY + sideLength / 2);
@@ -75,7 +75,7 @@ void ElaScrollBarStyle::drawComplexControl(ComplexControl control, const QStyleO
                     qreal centerToTop = (sideLength / 2) / qCos(30 * M_PI / 180.0);
                     qreal centerToBottom = (sideLength / 2) * qTan(30 * M_PI / 180.0);
                     // 上三角
-                    qreal centerX = upIndicatorRect.width() / 2.0;
+                    qreal centerX = upIndicatorRect.width() / 2.0 + upIndicatorRect.x();
                     qreal centerUpY = upIndicatorRect.center().y() + 2;
                     qreal centerDownY = downIndicatorRect.center().y() + 2;
                     QPainterPath upPath;
@@ -100,11 +100,11 @@ void ElaScrollBarStyle::drawComplexControl(ComplexControl control, const QStyleO
             painter->setBrush(ElaThemeColor(_themeMode, ScrollBarHandle));
             if (sopt->orientation == Qt::Horizontal)
             {
-                sliderRect.setRect(sliderRect.x(), sliderRect.bottom() - _sliderMargin - _pSliderExtent, sliderRect.width(), _pSliderExtent);
+                sliderRect.setRect(sliderRect.x(), sliderRect.center().y() - _pSliderExtent/2, sliderRect.width(), _pSliderExtent);
             }
             else
             {
-                sliderRect.setRect(sliderRect.right() - _sliderMargin - _pSliderExtent, sliderRect.y(), _pSliderExtent, sliderRect.height());
+                sliderRect.setRect(sliderRect.center().x() - _pSliderExtent/2, sliderRect.y(), _pSliderExtent, sliderRect.height());
             }
             painter->drawRoundedRect(sliderRect, _pSliderExtent / 2.0, _pSliderExtent / 2.0);
             painter->restore();
