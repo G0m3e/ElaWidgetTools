@@ -6,6 +6,7 @@
 #include "stdafx.h"
 
 class ElaContentDialogPrivate;
+class ElaPushButton;
 class ELA_EXPORT ElaContentDialog : public QDialog
 {
     Q_OBJECT
@@ -21,6 +22,10 @@ public:
     void setLeftButtonText(QString text);
     void setMiddleButtonText(QString text);
     void setRightButtonText(QString text);
+
+    ElaPushButton* getLeftButton();
+    ElaPushButton* getMiddleButton();
+    ElaPushButton* getRightButton();
 
     void setLeftButtonVisible(bool bVisible);
     void setMiddleButtonVisible(bool bVisible);

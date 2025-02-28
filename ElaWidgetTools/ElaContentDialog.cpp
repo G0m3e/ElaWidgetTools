@@ -151,6 +151,24 @@ void ElaContentDialog::setRightButtonText(QString text)
     d->_rightButton->setText(text);
 }
 
+ElaPushButton *ElaContentDialog::getLeftButton()
+{
+    Q_D(ElaContentDialog);
+    return d->_leftButton;
+}
+
+ElaPushButton *ElaContentDialog::getMiddleButton()
+{
+    Q_D(ElaContentDialog);
+    return d->_middleButton;
+}
+
+ElaPushButton *ElaContentDialog::getRightButton()
+{
+    Q_D(ElaContentDialog);
+    return d->_rightButton;
+}
+
 void ElaContentDialog::setLeftButtonVisible(bool bVisible)
 {
     Q_D(ElaContentDialog);
