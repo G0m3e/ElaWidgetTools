@@ -7,6 +7,7 @@
 
 class ElaProgressRingStyle;
 class QPropertyAnimation;
+class QParallelAnimationGroup;
 class ElaProgressRing;
 class ElaProgressRingPrivate : public QObject
 {
@@ -19,7 +20,9 @@ public:
 private:
     bool _isBusyAnimation{false};
     ElaProgressRingStyle* _style{nullptr};
-    QPropertyAnimation* _busyAnimation{nullptr};
+    QPropertyAnimation* _busyStartAnimation{nullptr};
+    QPropertyAnimation* _busySweepAnimation{nullptr};
+    QParallelAnimationGroup* _busyAnimationGroup{nullptr};
 };
 
 #endif // ELAPROGRESSRINGPRIVATE_H

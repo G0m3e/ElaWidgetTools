@@ -9,6 +9,7 @@
 #include "ElaMultiSelectComboBox.h"
 #include "ElaPlainTextEdit.h"
 #include "ElaProgressBar.h"
+#include "ElaProgressRing.h"
 #include "ElaRadioButton.h"
 #include "ElaScrollPageArea.h"
 #include "ElaSlider.h"
@@ -211,6 +212,18 @@ T_BaseComponents::T_BaseComponents(QWidget* parent)
     progressBarLayout->addWidget(_progressBar);
     progressBarLayout->addStretch();
 
+    auto _progressRing = new ElaProgressRing(this);
+    _progressRing->setMinimum(0);
+    _progressRing->setMaximum(0);
+    ElaScrollPageArea* progressRingArea = new ElaScrollPageArea(this);
+    QHBoxLayout* progressRingLayout = new QHBoxLayout(progressRingArea);
+    ElaText* progressRingText = new ElaText("ElaProgressRing", this);
+    progressRingText->setTextPixelSize(15);
+    progressRingLayout->addWidget(progressRingText);
+    progressRingLayout->addStretch();
+    progressRingLayout->addWidget(_progressRing, 0, Qt::AlignCenter);
+    progressRingLayout->addStretch();
+
     ElaPlainTextEdit* edit = new ElaPlainTextEdit(this);
     edit->setPlainText("这是一个ElaPlainTextEdit  暂时放在这里");
 
@@ -227,6 +240,7 @@ T_BaseComponents::T_BaseComponents(QWidget* parent)
     centerLayout->addWidget(sliderArea);
     centerLayout->addWidget(radioButtonArea);
     centerLayout->addWidget(progressBarArea);
+    centerLayout->addWidget(progressRingArea);
     centerLayout->addWidget(edit);
     centerLayout->addStretch();
     centerLayout->setContentsMargins(0, 0, 0, 0);

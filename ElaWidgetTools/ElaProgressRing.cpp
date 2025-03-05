@@ -1,6 +1,7 @@
 #include "ElaProgressRing.h"
 
 #include <QPropertyAnimation>
+#include <QParallelAnimationGroup>
 #include <QStyleOption>
 
 #include "ElaProgressRingPrivate.h"
@@ -14,13 +15,31 @@ ElaProgressRing::ElaProgressRing(QWidget* parent)
     d->q_ptr = this;
     d->_style = new ElaProgressRingStyle(style());
     setStyle(d->_style);
-    d->_busyAnimation = new QPropertyAnimation(d->_style, "busyStartValue");
-    connect(d->_busyAnimation, &QPropertyAnimation::valueChanged, this, [=](const QVariant& value) {
-        d->_style->setProperty("busyEndValue", value.toInt() + 75);
+    setMinimumHeight(64);
+    d->_busyStartAnimation = new QPropertyAnimation(d->_style, "startAngle");
+    connect(d->_busyStartAnimation, &QPropertyAnimation::valueChanged, this, [=](const QVariant& value) {
         update();
     });
-    d->_busyAnimation->setDuration(2000);
-    d->_busyAnimation->setLoopCount(-1);
+    d->_busyStartAnimation->setDuration(2000);
+    d->_busyStartAnimation->setKeyValueAt(0.0, 0);
+    d->_busyStartAnimation->setKeyValueAt(0.25, 270);
+    d->_busyStartAnimation->setKeyValueAt(0.33, 360);
+    d->_busyStartAnimation->setKeyValueAt(0.67, 720);
+    d->_busyStartAnimation->setKeyValueAt(1.0, 1080);
+    d->_busyStartAnimation->setLoopCount(-1);
+
+    d->_busySweepAnimation = new QPropertyAnimation(d->_style, "sweepAngle");
+    d->_busySweepAnimation->setDuration(2000);
+    d->_busySweepAnimation->setKeyValueAt(0.0, 0);
+    d->_busySweepAnimation->setKeyValueAt(0.25, 90);
+    d->_busySweepAnimation->setKeyValueAt(0.33, 180);
+    d->_busySweepAnimation->setKeyValueAt(0.67, 90);
+    d->_busySweepAnimation->setKeyValueAt(1.0, 0);
+    d->_busySweepAnimation->setLoopCount(-1);
+
+    d->_busyAnimationGroup = new QParallelAnimationGroup(d->_style);
+    d->_busyAnimationGroup->addAnimation(d->_busyStartAnimation);
+    d->_busyAnimationGroup->addAnimation(d->_busySweepAnimation);
 }
 
 ElaProgressRing::~ElaProgressRing()
@@ -33,7 +52,7 @@ void ElaProgressRing::setMinimum(int minimum)
     if (d->_isBusyAnimation && !(maximum() == 0 && minimum == 0))
     {
         d->_isBusyAnimation = false;
-        d->_busyAnimation->stop();
+        d->_busyAnimationGroup->stop();
     }
     QProgressBar::setMinimum(minimum);
 }
@@ -44,7 +63,7 @@ void ElaProgressRing::setMaximum(int maximum)
     if (d->_isBusyAnimation && !(minimum() == 0 && maximum == 0))
     {
         d->_isBusyAnimation = false;
-        d->_busyAnimation->stop();
+        d->_busyAnimationGroup->stop();
     }
     QProgressBar::setMaximum(maximum);
 }
@@ -57,16 +76,7 @@ void ElaProgressRing::paintEvent(QPaintEvent* event)
         QStyleOptionProgressBar option;
         option.initFrom(this);
         d->_isBusyAnimation = true;
-        d->_busyAnimation->setStartValue(-75);
-        if (orientation() == Qt::Horizontal)
-        {
-            d->_busyAnimation->setEndValue(this->width());
-        }
-        else
-        {
-            d->_busyAnimation->setEndValue(this->height());
-        }
-        d->_busyAnimation->start();
+        d->_busyAnimationGroup->start();
     }
     QProgressBar::paintEvent(event);
 }
@@ -74,13 +84,13 @@ void ElaProgressRing::paintEvent(QPaintEvent* event)
 void ElaProgressRing::resizeEvent(QResizeEvent* event)
 {
     Q_D(ElaProgressRing);
-    if (orientation() == Qt::Horizontal)
-    {
-        d->_busyAnimation->setEndValue(this->width());
-    }
-    else
-    {
-        d->_busyAnimation->setEndValue(this->height());
-    }
+    // if (orientation() == Qt::Horizontal)
+    // {
+    //     d->_busyStartAnimation->setEndValue(this->width());
+    // }
+    // else
+    // {
+    //     d->_busyStartAnimation->setEndValue(this->height());
+    // }
     QProgressBar::resizeEvent(event);
 }
