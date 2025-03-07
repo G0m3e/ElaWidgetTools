@@ -31,9 +31,11 @@ void ElaProgressRingStyle::drawControl(ControlElement element, const QStyleOptio
         painter->setBrush(ElaThemeColor(_themeMode, BasicChute));
         // qDebug() << option->rect;
         QPoint center = option->rect.center();
-        int radius = size / 2 - 5;
-        painter->drawArc(QRect(center.x() - radius, center.y() - radius, radius * 2, radius * 2),
-                         0, 360 * 16);
+        int margin = 5;
+        int radius = size / 2;
+        // QRectF arcRect(center.x() - radius + margin, center.y() - radius + margin, (radius - margin) * 2, (radius - margin) * 2);
+        QRectF arcRect = QRectF(option->rect).adjusted(5, 5, -5, -5);
+        painter->drawArc(arcRect, 0, 360 * 16);
         painter->restore();
         return;
     }
@@ -48,7 +50,10 @@ void ElaProgressRingStyle::drawControl(ControlElement element, const QStyleOptio
         QRect contentRect = popt->rect;
         int size = qMin(contentRect.width(), contentRect.height());
         QPoint center = contentRect.center();
-        int radius = size / 2 - 5;
+        int margin = 5;
+        int radius = size / 2;
+        // QRectF arcRect(center.x() - radius + margin, center.y() - radius + margin, (radius - margin) * 2, (radius - margin) * 2);
+        QRectF arcRect = QRectF(option->rect).adjusted(5, 5, -5, -5);
         painter->save();
         painter->setRenderHints(QPainter::Antialiasing);
         painter->setPen(QPen(ElaThemeColor(_themeMode, PrimaryNormal), size*0.08, Qt::SolidLine, Qt::RoundCap));
@@ -70,11 +75,11 @@ void ElaProgressRingStyle::drawControl(ControlElement element, const QStyleOptio
             int sweepAngle = this->property("sweepAngle").toInt();
             if(reverse)
             {
-                painter->drawArc(QRect(center.x() - radius, center.y() - radius, radius * 2, radius * 2), startAngle * 16, -sweepAngle * 16);
+                painter->drawArc(arcRect, startAngle * 16, -sweepAngle * 16);
             }
             else
             {
-                painter->drawArc(QRect(center.x() - radius, center.y() - radius, radius * 2, radius * 2), -startAngle * 16, sweepAngle * 16);
+                painter->drawArc(arcRect, -startAngle * 16, sweepAngle * 16);
             }
         }
         else
@@ -83,12 +88,12 @@ void ElaProgressRingStyle::drawControl(ControlElement element, const QStyleOptio
             int angleSpan = int(360 * ratio * 16);
             if(reverse)
             {
-                painter->drawArc(QRect(center.x() - radius, center.y() - radius, radius * 2, radius * 2),
+                painter->drawArc(arcRect,
                                  90 * 16, angleSpan);
             }
             else
             {
-                painter->drawArc(QRect(center.x() - radius, center.y() - radius, radius * 2, radius * 2),
+                painter->drawArc(arcRect,
                                  90 * 16, -angleSpan);
             }
         }
