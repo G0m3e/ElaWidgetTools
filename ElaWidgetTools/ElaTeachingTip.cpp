@@ -16,6 +16,7 @@ ElaTeachingTip::ElaTeachingTip(QWidget *parent, QWidget *target, ArrowPosition p
     , m_pTarget(target)
     , m_oArrowType(position)
     , m_pLayout(new QHBoxLayout(this))
+    , m_pEffect(new ScaleEffect(this))
 {
     setFixedSize(150, 50);
     setWindowFlags(Qt::FramelessWindowHint | Qt::Popup | Qt::NoDropShadowWindowHint);
@@ -47,6 +48,25 @@ ElaTeachingTip::ElaTeachingTip(QWidget *parent, QWidget *target, ArrowPosition p
     connect(eTheme, &ElaTheme::themeModeChanged, this, [=](ElaThemeType::ThemeMode themeMode) {
         m_oThemeMode = themeMode;
     });
+    // getBubblePath();
+    QTimer::singleShot(0, this, [=](){
+        getBubblePath();
+        m_pEffect->setScale(0.0);
+        m_pEffect->setScaleOrigin(m_oArrowPos);
+        setGraphicsEffect(m_pEffect);
+    });
+    m_pShowAnim = new QPropertyAnimation(m_pEffect, "scale", this);
+    m_pShowAnim->setDuration(250);
+    m_pShowAnim->setStartValue(0.0);
+    m_pShowAnim->setEndValue(1.0);
+    m_pShowAnim->setEasingCurve(QEasingCurve::OutExpo);
+
+    m_pHideAnim = new QPropertyAnimation(m_pEffect, "scale", this);
+    m_pHideAnim->setDuration(250);
+    m_pHideAnim->setStartValue(1.0);
+    m_pHideAnim->setEndValue(0.0);
+    m_pHideAnim->setEasingCurve(QEasingCurve::InExpo);
+    connect(m_pHideAnim, &QPropertyAnimation::finished, this, &ElaTeachingTip::hide);
 }
 
 void ElaTeachingTip::setText(const QString &text)
@@ -74,34 +94,24 @@ void ElaTeachingTip::setCloseButtonVisible(bool bVisible)
 
 void ElaTeachingTip::showTip()
 {
+    if (m_pShowAnim->state() == QAbstractAnimation::Running ||
+        m_pHideAnim->state() == QAbstractAnimation::Running)
+    {
+        return;
+    }
     updatePosition();
     show();
-    auto effect = new ScaleEffect(this);
-    effect->setScale(0.1);
-    effect->setScaleOrigin(m_oArrowPos);
-    setGraphicsEffect(effect);
-    QPropertyAnimation *anim = new QPropertyAnimation(effect, "scale", this);
-    anim->setDuration(200);
-    anim->setStartValue(0.1);
-    anim->setEndValue(1.0);
-    anim->setEasingCurve(QEasingCurve::OutBack);
-    anim->start(QAbstractAnimation::DeleteWhenStopped);
+    m_pShowAnim->start();
 }
 
 void ElaTeachingTip::hideTip()
 {
-    auto effect = qobject_cast<ScaleEffect *>(graphicsEffect());
-    if (!effect)
-        return hide();
-    QPropertyAnimation *anim = new QPropertyAnimation(effect, "scale", this);
-    anim->setDuration(150);
-    anim->setStartValue(1.0);
-    anim->setEndValue(0.0);
-    anim->setEasingCurve(QEasingCurve::InBack);
-    connect(anim, &QPropertyAnimation::finished, this, [this]() {
-        this->hide();
-    });
-    anim->start(QAbstractAnimation::DeleteWhenStopped);
+    if (m_pShowAnim->state() == QAbstractAnimation::Running ||
+        m_pHideAnim->state() == QAbstractAnimation::Running)
+    {
+        return;
+    }
+    m_pHideAnim->start();
 }
 
 void ElaTeachingTip::updatePosition()
@@ -169,7 +179,7 @@ void ElaTeachingTip::paintEvent(QPaintEvent *event)
 
 bool ElaTeachingTip::event(QEvent *event)
 {
-    if (event->type() == QEvent::WindowDeactivate ||
+    if (event->type() == QEvent::WindowDeactivate || event->type() == QEvent::MouseButtonDblClick ||
         (event->type() == QEvent::MouseButtonPress && !geometry().toRectF().contains(static_cast<QMouseEvent*>(event)->globalPosition())))
     {
         hideTip();

@@ -10,6 +10,7 @@
 
 class QHBoxLayout;
 class ElaIconButton;
+class QPropertyAnimation;
 class ScaleEffect : public QGraphicsEffect
 {
     Q_OBJECT
@@ -96,4 +97,7 @@ private:
     ElaThemeType::ThemeMode m_oThemeMode;
     QHBoxLayout* m_pLayout{nullptr};
     ElaIconButton* m_pCloseBtn{nullptr};
+    ScaleEffect* m_pEffect{nullptr};
+    QPropertyAnimation* m_pShowAnim{nullptr};
+    QPropertyAnimation* m_pHideAnim{nullptr};
 };
