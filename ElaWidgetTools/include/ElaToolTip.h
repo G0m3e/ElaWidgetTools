@@ -22,7 +22,7 @@ public:
     void updatePos();
 
 protected:
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void paintEvent(QPaintEvent* event) override;
 };
 
 #endif // ELATOOLTIP_H

@@ -13,7 +13,7 @@ class ELA_EXPORT ElaTimeEdit : public QTimeEdit
 public:
     explicit ElaTimeEdit(QWidget* parent = nullptr);
     ~ElaTimeEdit();
-    void stepBy(int steps);
+    void stepBy(int steps) override;
 
 protected:
     void contextMenuEvent(QContextMenuEvent* event) override;

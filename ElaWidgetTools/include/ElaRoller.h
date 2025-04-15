@@ -22,8 +22,8 @@ public:
 protected:
     virtual void wheelEvent(QWheelEvent* event) override;
     virtual void mouseReleaseEvent(QMouseEvent* event) override;
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void leaveEvent(QEvent* event);
+    virtual void mouseMoveEvent(QMouseEvent* event) override;
+    virtual void leaveEvent(QEvent* event) override;
     virtual void paintEvent(QPaintEvent* event) override;
 };
 
