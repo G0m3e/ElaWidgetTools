@@ -50,6 +50,7 @@ Linux为QT5.15以上)，推荐版本为QT6.4.3和QT6.6.2；
 | ElaDockWidget          | 停靠窗口         |                            |
 | ElaSpinBox             | 微调框          |                            |
 | ElaDoubleSpinBox       | 微调框          | 浮点数                        |
+| ElaTimeEdit            | 时间调整框      |                            |
 | ElaDxgiManager         | DXGI采集器      | 支持自动选择采集设备 效率远高于原生采集       |
 | ElaEventBus            | 事件总线         |                            |
 | ElaFlowLayout          | 流式布局         | 支持动画                       |
@@ -70,6 +71,7 @@ Linux为QT5.15以上)，推荐版本为QT6.4.3和QT6.6.2；
 | ElaPushButton          | 按钮           |                            |
 | ElaPopularCard         | 热门卡片         |                            |
 | ElaProgressBar         | 进度条          |                            |
+| ElaProgressRing        | 进度环          |                            |
 | ElaPromotionCard       | 促销卡片         |                            |
 | ElaPromotionView       | 促销卡片视窗       |                            |
 | ElaSwitchButton        | 切换按钮         |                            |
@@ -98,3 +100,4 @@ Linux为QT5.15以上)，推荐版本为QT6.4.3和QT6.6.2；
 | ElaGraphicsItem        | 高级图元         | 大量实用API                    |
 | ElaWindow              | 带导航栏的无边框窗口   |                            |
 | ElaWidget              | 无边框模态窗口      |                            |
+| ElaTeachingTip         | 气泡提示框      |                            |
