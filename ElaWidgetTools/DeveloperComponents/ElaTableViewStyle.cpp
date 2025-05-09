@@ -71,7 +71,8 @@ void ElaTableViewStyle::drawPrimitive(PrimitiveElement element, const QStyleOpti
             if (vopt->state & QStyle::State_Selected)
             {
                 // 选中
-                painter->setBrush(ElaThemeColor(_themeMode, BasicSelectedAlpha));
+                QColor selectColor = (_themeMode == ElaThemeType::Light) ? QColor("#A0CFF5") : QColor("#005A9E");
+                painter->setBrush(selectColor);
                 painter->drawRect(itemRect);
             }
             else
