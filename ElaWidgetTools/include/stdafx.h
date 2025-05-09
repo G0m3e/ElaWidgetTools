@@ -3,9 +3,9 @@
 
 #include <QtCore/qglobal.h>
 
-#if defined(ELAWIDGETTOOLS_LIBRARY) && defined(QT_DLL) // 动态库
+#if defined(ELAWIDGETTOOLS_LIBRARY) && defined(ElaWidgetTools_EXPORTS) // 动态库
 #define ELA_EXPORT Q_DECL_EXPORT
-#elif defined(QT_DLL) // 使用动态库
+#elif defined(ElaWidgetTools_EXPORTS) // 使用动态库
 #define ELA_EXPORT Q_DECL_IMPORT
 #else // 静态库
 #define ELA_EXPORT

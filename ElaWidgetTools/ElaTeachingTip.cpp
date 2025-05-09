@@ -22,10 +22,7 @@ ElaTeachingTip::ElaTeachingTip(QWidget *parent, QWidget *target, ArrowPosition p
     setWindowFlags(Qt::FramelessWindowHint | Qt::Popup | Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
-    m_pLabel = new QLabel(this);
-    m_pLabel->setWordWrap(true);
-    m_pLabel->setText("111");
-    m_pLabel->setStyleSheet("color: white; padding: 8px;");
+    m_pLabel = new ElaText("TeachingTip", 14, this);
 
     m_pCloseBtn = new ElaIconButton(ElaIconType::Xmark, 17, 30, 30, this);
     m_pCloseBtn->setBorderRadius(5);
@@ -48,7 +45,6 @@ ElaTeachingTip::ElaTeachingTip(QWidget *parent, QWidget *target, ArrowPosition p
     connect(eTheme, &ElaTheme::themeModeChanged, this, [=](ElaThemeType::ThemeMode themeMode) {
         m_oThemeMode = themeMode;
     });
-    // getBubblePath();
     QTimer::singleShot(0, this, [=](){
         getBubblePath();
         m_pEffect->setScale(0.0);
@@ -85,6 +81,7 @@ void ElaTeachingTip::setCentralWidget(QWidget *centralWidget)
 {
     m_pLayout->takeAt(0);
     m_pLayout->insertWidget(0, centralWidget);
+    delete m_pLabel;
 }
 
 void ElaTeachingTip::setCloseButtonVisible(bool bVisible)
@@ -113,6 +110,30 @@ void ElaTeachingTip::hideTip()
     }
     m_pHideAnim->start();
 }
+
+QRect getRectByCenter(const QPoint& center, int width, int height)
+{
+    int x = center.x() - width / 2;
+    int y = center.y() - height / 2;
+    return QRect(x, y, width, height);
+}
+
+QFlags<OverflowDirection> checkOverflow(const QRect& a, const QRect& b)
+{
+    QFlags<OverflowDirection> result;
+
+    if (b.left() < a.left())
+        result |= OverflowDirection::Left;
+    if (b.right() > a.right())
+        result |= OverflowDirection::Right;
+    if (b.top() < a.top())
+        result |= OverflowDirection::Top;
+    if (b.bottom() > a.bottom())
+        result |= OverflowDirection::Bottom;
+
+    return result;
+}
+
 
 void ElaTeachingTip::updatePosition()
 {
@@ -163,13 +184,10 @@ void ElaTeachingTip::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
-    // eTheme->drawEffectShadow(&painter, rect(), m_nRadius, m_nRadius);
     painter.save();
     painter.setBrush(ElaThemeColor(m_oThemeMode, PopupBase));
     QPainterPath path = getBubblePath();
-    // painter.fillPath(path, ElaThemeColor(m_oThemeMode, PopupBase));
-    // painter.setPen(ElaThemeColor(m_oThemeMode, BasicBorderDeep));
-    QPen pen(ElaThemeColor(m_oThemeMode, BasicBorder));
+    QPen pen(ElaThemeColor(m_oThemeMode, PopupBorder));
     pen.setWidthF(1.0);
     pen.setJoinStyle(Qt::RoundJoin);
     painter.setPen(pen);

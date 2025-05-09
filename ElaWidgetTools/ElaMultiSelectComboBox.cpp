@@ -66,7 +66,7 @@ ElaMultiSelectComboBox::ElaMultiSelectComboBox(QWidget* parent)
     connect(this, QOverload<int>::of(&ElaMultiSelectComboBox::currentIndexChanged), d, &ElaMultiSelectComboBoxPrivate::_refreshCurrentIndexs);
     d->_itemSelection.resize(32);
     d->_itemSelection.fill(false);
-    d->_itemSelection[0] = true;
+    // d->_itemSelection[0] = true;
     QComboBox::setMaxVisibleItems(5);
     connect(eTheme, &ElaTheme::themeModeChanged, this, [=](ElaThemeType::ThemeMode themeMode) { d->_themeMode = themeMode; });
 }
@@ -195,8 +195,8 @@ void ElaMultiSelectComboBox::paintEvent(QPaintEvent* e)
         painter.rotate(d->_pExpandIconRotate);
         painter.translate(-expandIconRect.x() - (qreal)expandIconRect.width() / 2 + 2, -expandIconRect.y() - (qreal)expandIconRect.height() / 2);
         painter.drawText(expandIconRect, Qt::AlignVCenter, QChar((unsigned short)ElaIconType::AngleDown));
-        painter.restore();
     }
+    painter.restore();
 }
 
 void ElaMultiSelectComboBox::showPopup()

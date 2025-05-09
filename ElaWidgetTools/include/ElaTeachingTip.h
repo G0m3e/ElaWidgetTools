@@ -11,6 +11,7 @@
 class QHBoxLayout;
 class ElaIconButton;
 class QPropertyAnimation;
+class ElaText;
 class ScaleEffect : public QGraphicsEffect
 {
     Q_OBJECT
@@ -58,6 +59,14 @@ private:
     QPointF m_scaleOrigin;
 };
 
+enum class OverflowDirection {
+    None = 0,
+    Left = 1,
+    Right = 2,
+    Top = 4,
+    Bottom = 8
+};
+
 class ElaTeachingTip : public QWidget
 {
     Q_OBJECT
@@ -79,6 +88,7 @@ public:
 
 private:
     void updatePosition();
+    QPoint getCenter(ArrowPosition oArrowType);
     QPainterPath getBubblePath();
 
 protected:
@@ -89,7 +99,7 @@ private:
     QWidget* m_pTarget;
     ArrowPosition m_oArrowType;
     QPoint m_oArrowPos;
-    QLabel* m_pLabel;
+    ElaText* m_pLabel;
     QPushButton* m_closeBtn;
     int m_nArrowSize = 5;
     int m_nRadius = 8;
